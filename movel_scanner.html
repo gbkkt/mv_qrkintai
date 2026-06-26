@@ -12,40 +12,51 @@ body { background: #0f0f0f; color: #fff; font-family: -apple-system, sans-serif;
 .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: #60a5fa; }
 .header h1 { font-size: 15px; font-weight: 500; }
 .time { font-size: 13px; color: rgba(255,255,255,0.4); font-variant-numeric: tabular-nums; }
+.mode-select { flex-shrink: 0; padding: 14px 20px; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
+.mode-label { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+.mode-btns { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.mode-btn { padding: 10px 4px; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 500; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; transition: all 0.15s; }
+.mode-btn.active { border-color: #60a5fa; background: rgba(96,165,250,0.15); color: #60a5fa; }
+.mode-btn:active { transform: scale(0.96); }
 .camera-area { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; }
 #videoEl { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
 #debugCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
-.scan-frame { position: relative; z-index: 2; width: 220px; height: 220px; }
-.corner { position: absolute; width: 30px; height: 30px; }
+.scan-frame { position: relative; z-index: 2; width: 200px; height: 200px; }
+.corner { position: absolute; width: 28px; height: 28px; }
 .corner-tl { top: 0; left: 0; border-top: 3px solid #fff; border-left: 3px solid #fff; border-radius: 3px 0 0 0; }
 .corner-tr { top: 0; right: 0; border-top: 3px solid #fff; border-right: 3px solid #fff; border-radius: 0 3px 0 0; }
 .corner-bl { bottom: 0; left: 0; border-bottom: 3px solid #fff; border-left: 3px solid #fff; border-radius: 0 0 0 3px; }
 .corner-br { bottom: 0; right: 0; border-bottom: 3px solid #fff; border-right: 3px solid #fff; border-radius: 0 0 3px 0; }
 .scan-line { position: absolute; left: 8px; right: 8px; height: 2px; background: linear-gradient(90deg, transparent, #60a5fa, transparent); animation: scan 1.5s ease-in-out infinite; z-index: 3; }
-@keyframes scan { 0% { top: 10px; } 50% { top: 205px; } 100% { top: 10px; } }
-.placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 1; }
+@keyframes scan { 0% { top: 8px; } 50% { top: 185px; } 100% { top: 8px; } }
+.placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 1; }
 .placeholder svg { opacity: 0.2; }
-.placeholder p { font-size: 14px; color: rgba(255,255,255,0.3); }
-.cam-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 4; background: rgba(0,0,0,0.6); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px; color: rgba(255,255,255,0.7); font-size: 12px; white-space: nowrap; }
+.placeholder p { font-size: 14px; color: rgba(255,255,255,0.3); text-align: center; line-height: 1.6; }
+.cam-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 4; background: rgba(0,0,0,0.7); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px; font-size: 12px; white-space: nowrap; }
+.mode-indicator { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 4; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; white-space: nowrap; }
 .debug-text { position: absolute; top: 8px; left: 8px; z-index: 5; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #60a5fa; }
-.toast { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 10; padding: 12px 20px; border-radius: 12px; font-size: 15px; font-weight: 500; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
-.toast.show { opacity: 1; }
-.toast-in { background: #166534; color: #86efac; border: 0.5px solid #22c55e; }
-.toast-out { background: #854d0e; color: #fde68a; border: 0.5px solid #f59e0b; }
-.toast-err { background: #7f1d1d; color: #fca5a5; border: 0.5px solid #ef4444; }
-.log-area { border-top: 0.5px solid rgba(255,255,255,0.08); background: #161616; padding: 12px 20px; height: 180px; overflow-y: auto; flex-shrink: 0; }
+.freeze-overlay { position: absolute; inset: 0; z-index: 6; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.freeze-overlay.show { opacity: 1; pointer-events: auto; }
+.freeze-msg { text-align: center; }
+.freeze-name { font-size: 32px; font-weight: 500; margin-bottom: 6px; }
+.freeze-sub { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+.freeze-countdown { font-size: 48px; font-weight: 300; color: rgba(255,255,255,0.3); }
+.log-area { border-top: 0.5px solid rgba(255,255,255,0.08); background: #161616; padding: 12px 20px; height: 140px; overflow-y: auto; flex-shrink: 0; }
 .log-header { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
-.log-empty { font-size: 13px; color: rgba(255,255,255,0.25); text-align: center; padding: 20px 0; }
-.log-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid rgba(255,255,255,0.06); animation: fadeIn 0.25s ease; }
+.log-empty { font-size: 13px; color: rgba(255,255,255,0.25); text-align: center; padding: 16px 0; }
+.log-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 0.5px solid rgba(255,255,255,0.06); animation: fadeIn 0.25s ease; }
 .log-item:last-child { border-bottom: none; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
-.badge-in { background: rgba(34,197,94,0.15); color: #86efac; }
-.badge-out { background: rgba(245,158,11,0.15); color: #fde68a; }
-.badge-err { background: rgba(239,68,68,0.15); color: #fca5a5; }
+.b-出勤 { background: rgba(34,197,94,0.15);  color: #86efac; }
+.b-退勤 { background: rgba(96,165,250,0.15); color: #93c5fd; }
+.b-早退 { background: rgba(251,191,36,0.15); color: #fde68a; }
+.b-外出 { background: rgba(167,139,250,0.15);color: #c4b5fd; }
+.b-戻り { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+.b-err  { background: rgba(239,68,68,0.15);  color: #fca5a5; }
 .log-name { font-size: 13px; font-weight: 500; flex: 1; }
 .log-time { font-size: 12px; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; }
-.bottom-bar { padding: 12px 20px; border-top: 0.5px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.bottom-bar { padding: 10px 20px; border-top: 0.5px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .status-wrap { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.4); }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -55,45 +66,55 @@ body { background: #0f0f0f; color: #fff; font-family: -apple-system, sans-serif;
 </head>
 <body>
 <div class="header">
-  <div class="header-left">
-    <div class="logo-dot"></div>
-    <h1>movel 勤怠スキャナ</h1>
-  </div>
+  <div class="header-left"><div class="logo-dot"></div><h1>movel 勤怠スキャナ</h1></div>
   <span class="time" id="clock">--:--:--</span>
+</div>
+<div class="mode-select">
+  <div class="mode-label">打刻種別を選んでからQRをかざす</div>
+  <div class="mode-btns">
+    <button class="mode-btn active" data-code="1" data-label="出勤" onclick="selectMode(this)">出勤</button>
+    <button class="mode-btn" data-code="2" data-label="退勤" onclick="selectMode(this)">退勤</button>
+    <button class="mode-btn" data-code="5" data-label="早退" onclick="selectMode(this)">早退</button>
+    <button class="mode-btn" data-code="3" data-label="外出" onclick="selectMode(this)">外出</button>
+    <button class="mode-btn" data-code="4" data-label="戻り" onclick="selectMode(this)">戻り</button>
+  </div>
 </div>
 <div class="camera-area" id="cameraArea">
   <video id="videoEl" autoplay playsinline muted style="display:none;"></video>
   <canvas id="debugCanvas"></canvas>
   <div id="scanFrame" style="display:none;" class="scan-frame">
-    <div class="corner corner-tl"></div>
-    <div class="corner corner-tr"></div>
-    <div class="corner corner-bl"></div>
-    <div class="corner corner-br"></div>
+    <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div><div class="corner corner-br"></div>
     <div class="scan-line"></div>
   </div>
   <div class="placeholder" id="placeholder">
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
       <circle cx="12" cy="13" r="4"/>
     </svg>
-    <p>カメラを起動してください</p>
+    <p>種別を選んで<br>カメラを起動してください</p>
   </div>
   <div class="cam-hint" id="camHint" style="display:none;">QRコードをかざしてください</div>
+  <div class="mode-indicator" id="modeIndicator" style="display:none;"></div>
   <div class="debug-text" id="debugText" style="display:none;"></div>
-  <div class="toast" id="toast"></div>
+  <div class="freeze-overlay" id="freezeOverlay">
+    <div class="freeze-msg">
+      <div class="freeze-name" id="freezeName"></div>
+      <div class="freeze-sub" id="freezeSub"></div>
+      <div class="freeze-countdown" id="freezeCount"></div>
+    </div>
+  </div>
 </div>
 <div class="log-area">
   <div class="log-header">打刻ログ</div>
   <div id="logList"><div class="log-empty">スキャン待機中...</div></div>
 </div>
 <div class="bottom-bar">
-  <div class="status-wrap">
-    <div class="status-dot"></div>
-    <span id="statusText">待機中</span>
-  </div>
+  <div class="status-wrap"><div class="status-dot"></div><span id="statusText">待機中</span></div>
   <button class="btn" id="mainBtn" onclick="startCamera()">カメラ起動</button>
 </div>
-<script>(function webpackUniversalModuleDefinition(root, factory) {
+<script>
+(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -10194,65 +10215,80 @@ function findAlignmentPattern(matrix, alignmentPatternQuads, topRight, topLeft, 
 
 /***/ })
 /******/ ])["default"];
-});</script>
+});
+</script>
 <script>
 const KOT_TOKEN = 'YOUR_KOT_TOKEN_HERE';
 const employees = {
   'movel_yuki_001': { name: 'Yuki', employeeKey: 'YOUR_EMPLOYEE_KEY' },
   'movel_taro_002': { name: 'Taro', employeeKey: 'YOUR_EMPLOYEE_KEY_2' },
 };
-
-let scanning = false;
-let lastScanned = '';
-let lastScannedTime = 0;
-const COOLDOWN = 3000;
-const attendanceState = {};
-let frameCount = 0;
-let threshold = 128;
+const FREEZE_SEC = 4;
+const modeColors = { '出勤':'#22c55e','退勤':'#60a5fa','早退':'#fbbf24','外出':'#a78bfa','戻り':'#34d399' };
+let scanning = false, frozen = false, frameCount = 0, threshold = 128, freezeTimer = null;
+let currentMode = { code: 1, label: '出勤' };
 
 setInterval(() => {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('ja-JP', { hour12: false });
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('ja-JP', { hour12: false });
 }, 1000);
 
-function showToast(text, type) {
-  const t = document.getElementById('toast');
-  t.className = `toast toast-${type} show`;
-  t.textContent = text;
-  setTimeout(() => t.classList.remove('show'), 2500);
+function selectMode(el) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentMode = { code: parseInt(el.dataset.code), label: el.dataset.label };
+  updateModeIndicator();
 }
 
-function addLog(id, name, type) {
+function updateModeIndicator() {
+  const ind = document.getElementById('modeIndicator');
+  const color = modeColors[currentMode.label] || '#60a5fa';
+  ind.textContent = currentMode.label + ' モード';
+  ind.style.cssText = 'display:block; background:rgba(0,0,0,0.7); border:0.5px solid ' + color + '; color:' + color + '; position:absolute; top:12px; left:50%; transform:translateX(-50%); z-index:4; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:500; white-space:nowrap;';
+}
+
+function addLog(name, label) {
   const list = document.getElementById('logList');
   const empty = list.querySelector('.log-empty');
   if (empty) empty.remove();
   const timeStr = new Date().toLocaleTimeString('ja-JP', { hour12: false });
-  const labelMap = { in: '出勤', out: '退勤', err: '未登録' };
+  const cls = label === 'err' ? 'b-err' : 'b-' + label;
   const item = document.createElement('div');
   item.className = 'log-item';
-  item.innerHTML = `<span class="badge badge-${type}">${labelMap[type]}</span><span class="log-name">${name}</span><span class="log-time">${timeStr}</span>`;
+  item.innerHTML = '<span class="badge ' + cls + '">' + (label === 'err' ? '未登録' : label) + '</span><span class="log-name">' + name + '</span><span class="log-time">' + timeStr + '</span>';
   list.insertBefore(item, list.firstChild);
+}
+
+function freeze(name, label) {
+  frozen = true;
+  const color = modeColors[label] || '#fff';
+  document.getElementById('freezeName').textContent = name;
+  document.getElementById('freezeName').style.color = color;
+  document.getElementById('freezeSub').textContent = label + ' 打刻完了';
+  document.getElementById('freezeOverlay').classList.add('show');
+  let count = FREEZE_SEC;
+  document.getElementById('freezeCount').textContent = count;
+  if (freezeTimer) clearInterval(freezeTimer);
+  freezeTimer = setInterval(() => {
+    count--;
+    document.getElementById('freezeCount').textContent = count;
+    if (count <= 0) {
+      clearInterval(freezeTimer);
+      document.getElementById('freezeOverlay').classList.remove('show');
+      frozen = false;
+    }
+  }, 1000);
 }
 
 async function punch(employeeId) {
   const emp = employees[employeeId];
-  if (!emp) {
-    showToast('未登録: ' + employeeId.substring(0, 12), 'err');
-    addLog(employeeId, employeeId, 'err');
-    return;
-  }
-  const isIn = !attendanceState[employeeId];
-  attendanceState[employeeId] = isIn;
-  const type = isIn ? 'in' : 'out';
-  showToast(`${emp.name} ${isIn ? '出勤' : '退勤'}`, type);
-  addLog(employeeId, emp.name, type);
+  if (!emp) { addLog(employeeId.substring(0, 10), 'err'); freeze('未登録', '退勤'); return; }
+  addLog(emp.name, currentMode.label);
+  freeze(emp.name, currentMode.label);
 }
 
-// グレースケール→二値化でスクリーンQR対策
-function processImageForScreen(ctx, w, h) {
+function processImage(ctx, w, h) {
   const imageData = ctx.getImageData(0, 0, w, h);
   const data = imageData.data;
-  // グレースケール変換 + 適応的二値化
   for (let i = 0; i < data.length; i += 4) {
     const gray = data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114;
     const val = gray > threshold ? 255 : 0;
@@ -10266,9 +10302,7 @@ async function startCamera() {
   const btn = document.getElementById('mainBtn');
   btn.textContent = '起動中...';
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-    });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
     const video = document.getElementById('videoEl');
     video.srcObject = stream;
     video.style.display = 'block';
@@ -10277,6 +10311,7 @@ async function startCamera() {
     document.getElementById('camHint').style.display = 'block';
     document.getElementById('debugText').style.display = 'block';
     document.getElementById('statusText').textContent = 'スキャン中';
+    updateModeIndicator();
     btn.textContent = '停止';
     btn.onclick = stopCamera;
     scanning = true;
@@ -10288,14 +10323,17 @@ async function startCamera() {
 }
 
 function stopCamera() {
-  scanning = false;
+  scanning = false; frozen = false;
+  if (freezeTimer) clearInterval(freezeTimer);
   const video = document.getElementById('videoEl');
   if (video.srcObject) video.srcObject.getTracks().forEach(t => t.stop());
   video.style.display = 'none';
   document.getElementById('placeholder').style.display = 'flex';
   document.getElementById('scanFrame').style.display = 'none';
   document.getElementById('camHint').style.display = 'none';
+  document.getElementById('modeIndicator').style.display = 'none';
   document.getElementById('debugText').style.display = 'none';
+  document.getElementById('freezeOverlay').classList.remove('show');
   document.getElementById('statusText').textContent = '待機中';
   const btn = document.getElementById('mainBtn');
   btn.textContent = 'カメラ起動';
@@ -10304,53 +10342,35 @@ function stopCamera() {
 
 function scanLoop() {
   if (!scanning) return;
+  if (frozen) { requestAnimationFrame(scanLoop); return; }
   const video = document.getElementById('videoEl');
   if (video.readyState === video.HAVE_ENOUGH_DATA) {
     frameCount++;
     const canvas = document.getElementById('debugCanvas');
     const ctx = canvas.getContext('2d');
-    const W = video.videoWidth;
-    const H = video.videoHeight;
-    canvas.width = W;
-    canvas.height = H;
+    const W = video.videoWidth, H = video.videoHeight;
+    canvas.width = W; canvas.height = H;
     ctx.drawImage(video, 0, 0, W, H);
-
     let code = null;
-
-    // パス1: そのまま
     let imageData = ctx.getImageData(0, 0, W, H);
     code = jsQR(imageData.data, W, H, { inversionAttempts: 'attemptBoth' });
-
-    // パス2: 二値化
     if (!code) {
       ctx.drawImage(video, 0, 0, W, H);
-      imageData = processImageForScreen(ctx, W, H);
+      imageData = processImage(ctx, W, H);
       code = jsQR(imageData.data, W, H, { inversionAttempts: 'attemptBoth' });
     }
-
-    // パス3: 閾値を変えて再試行
     if (!code) {
       for (const th of [100, 160, 80, 200]) {
         threshold = th;
         ctx.drawImage(video, 0, 0, W, H);
-        imageData = processImageForScreen(ctx, W, H);
+        imageData = processImage(ctx, W, H);
         code = jsQR(imageData.data, W, H, { inversionAttempts: 'attemptBoth' });
         if (code) break;
       }
       threshold = 128;
     }
-
-    document.getElementById('debugText').textContent =
-      `${W}x${H} f:${frameCount}${code ? ' ✅' : ''}`;
-
-    if (code) {
-      const now = Date.now();
-      if (code.data !== lastScanned || now - lastScannedTime > COOLDOWN) {
-        lastScanned = code.data;
-        lastScannedTime = now;
-        punch(code.data);
-      }
-    }
+    document.getElementById('debugText').textContent = W + 'x' + H + ' f:' + frameCount + (code ? ' ✅' : '');
+    if (code) punch(code.data);
   }
   requestAnimationFrame(scanLoop);
 }
