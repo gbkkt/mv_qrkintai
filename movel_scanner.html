@@ -7,170 +7,53 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #0f0f0f; color: #fff; font-family: -apple-system, sans-serif; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-
-.header {
-  padding: 16px 20px;
-  border-bottom: 0.5px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
+.header { padding: 16px 20px; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .header-left { display: flex; align-items: center; gap: 10px; }
 .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: #60a5fa; }
 .header h1 { font-size: 15px; font-weight: 500; }
 .time { font-size: 13px; color: rgba(255,255,255,0.4); font-variant-numeric: tabular-nums; }
-
-.camera-area {
-  flex: 1;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  overflow: hidden;
-}
-
-#videoEl {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0; left: 0;
-}
-
-.scan-frame {
-  position: relative;
-  z-index: 2;
-  width: 220px;
-  height: 220px;
-}
+.camera-area { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; }
+#videoEl { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; filter: contrast(1.4) brightness(1.2); }
+#debugCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+.scan-frame { position: relative; z-index: 2; width: 220px; height: 220px; }
 .corner { position: absolute; width: 30px; height: 30px; }
 .corner-tl { top: 0; left: 0; border-top: 3px solid #fff; border-left: 3px solid #fff; border-radius: 3px 0 0 0; }
 .corner-tr { top: 0; right: 0; border-top: 3px solid #fff; border-right: 3px solid #fff; border-radius: 0 3px 0 0; }
 .corner-bl { bottom: 0; left: 0; border-bottom: 3px solid #fff; border-left: 3px solid #fff; border-radius: 0 0 0 3px; }
 .corner-br { bottom: 0; right: 0; border-bottom: 3px solid #fff; border-right: 3px solid #fff; border-radius: 0 0 3px 0; }
-.scan-line {
-  position: absolute;
-  left: 8px; right: 8px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #60a5fa, transparent);
-  animation: scan 2s ease-in-out infinite;
-  z-index: 3;
-}
-@keyframes scan {
-  0% { top: 10px; } 50% { top: 205px; } 100% { top: 10px; }
-}
-
-.placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  z-index: 1;
-}
+.scan-line { position: absolute; left: 8px; right: 8px; height: 2px; background: linear-gradient(90deg, transparent, #60a5fa, transparent); animation: scan 1.5s ease-in-out infinite; z-index: 3; }
+@keyframes scan { 0% { top: 10px; } 50% { top: 205px; } 100% { top: 10px; } }
+.placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 1; }
 .placeholder svg { opacity: 0.2; }
 .placeholder p { font-size: 14px; color: rgba(255,255,255,0.3); }
-
-.cam-hint {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 4;
-  background: rgba(0,0,0,0.6);
-  border: 0.5px solid rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 6px 14px;
-  color: rgba(255,255,255,0.7);
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-/* 打刻通知バナー */
-.toast {
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  padding: 12px 20px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.2s;
-  pointer-events: none;
-}
+.cam-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 4; background: rgba(0,0,0,0.6); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px; color: rgba(255,255,255,0.7); font-size: 12px; white-space: nowrap; }
+.debug-text { position: absolute; top: 8px; left: 8px; z-index: 5; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #60a5fa; }
+.toast { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 10; padding: 12px 20px; border-radius: 12px; font-size: 15px; font-weight: 500; white-space: nowrap; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
 .toast.show { opacity: 1; }
 .toast-in { background: #166534; color: #86efac; border: 0.5px solid #22c55e; }
 .toast-out { background: #854d0e; color: #fde68a; border: 0.5px solid #f59e0b; }
 .toast-err { background: #7f1d1d; color: #fca5a5; border: 0.5px solid #ef4444; }
-
-.log-area {
-  border-top: 0.5px solid rgba(255,255,255,0.08);
-  background: #161616;
-  padding: 12px 20px;
-  height: 180px;
-  overflow-y: auto;
-  flex-shrink: 0;
-}
+.log-area { border-top: 0.5px solid rgba(255,255,255,0.08); background: #161616; padding: 12px 20px; height: 180px; overflow-y: auto; flex-shrink: 0; }
 .log-header { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
 .log-empty { font-size: 13px; color: rgba(255,255,255,0.25); text-align: center; padding: 20px 0; }
-
-.log-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 0;
-  border-bottom: 0.5px solid rgba(255,255,255,0.06);
-  animation: fadeIn 0.25s ease;
-}
+.log-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid rgba(255,255,255,0.06); animation: fadeIn 0.25s ease; }
 .log-item:last-child { border-bottom: none; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-
 .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
-.badge-in  { background: rgba(34,197,94,0.15);  color: #86efac; }
+.badge-in { background: rgba(34,197,94,0.15); color: #86efac; }
 .badge-out { background: rgba(245,158,11,0.15); color: #fde68a; }
-.badge-err { background: rgba(239,68,68,0.15);  color: #fca5a5; }
-
+.badge-err { background: rgba(239,68,68,0.15); color: #fca5a5; }
 .log-name { font-size: 13px; font-weight: 500; flex: 1; }
 .log-time { font-size: 12px; color: rgba(255,255,255,0.3); font-variant-numeric: tabular-nums; }
-
-.bottom-bar {
-  padding: 12px 20px;
-  border-top: 0.5px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
+.bottom-bar { padding: 12px 20px; border-top: 0.5px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .status-wrap { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.4); }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-.btn {
-  font-size: 13px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 0.5px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  -webkit-tap-highlight-color: transparent;
-}
+.btn { font-size: 13px; padding: 8px 16px; border-radius: 8px; cursor: pointer; border: 0.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; display: flex; align-items: center; gap: 6px; -webkit-tap-highlight-color: transparent; }
 .btn:active { background: rgba(255,255,255,0.15); }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-left">
     <div class="logo-dot"></div>
@@ -178,10 +61,9 @@ body { background: #0f0f0f; color: #fff; font-family: -apple-system, sans-serif;
   </div>
   <span class="time" id="clock">--:--:--</span>
 </div>
-
 <div class="camera-area" id="cameraArea">
   <video id="videoEl" autoplay playsinline muted style="display:none;"></video>
-
+  <canvas id="debugCanvas"></canvas>
   <div id="scanFrame" style="display:none;" class="scan-frame">
     <div class="corner corner-tl"></div>
     <div class="corner corner-tr"></div>
@@ -189,7 +71,6 @@ body { background: #0f0f0f; color: #fff; font-family: -apple-system, sans-serif;
     <div class="corner corner-br"></div>
     <div class="scan-line"></div>
   </div>
-
   <div class="placeholder" id="placeholder">
     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -197,56 +78,44 @@ body { background: #0f0f0f; color: #fff; font-family: -apple-system, sans-serif;
     </svg>
     <p>カメラを起動してください</p>
   </div>
-
   <div class="cam-hint" id="camHint" style="display:none;">QRコードをかざしてください</div>
+  <div class="debug-text" id="debugText" style="display:none;"></div>
   <div class="toast" id="toast"></div>
 </div>
-
 <div class="log-area">
   <div class="log-header">打刻ログ</div>
   <div id="logList"><div class="log-empty">スキャン待機中...</div></div>
 </div>
-
 <div class="bottom-bar">
   <div class="status-wrap">
     <div class="status-dot"></div>
     <span id="statusText">待機中</span>
   </div>
-  <button class="btn" id="mainBtn" onclick="startCamera()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-    カメラ起動
-  </button>
+  <button class="btn" id="mainBtn" onclick="startCamera()">カメラ起動</button>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.min.js"></script>
 <script>
 const KOT_TOKEN = 'YOUR_KOT_TOKEN_HERE';
-
 const employees = {
   'movel_yuki_001': { name: 'Yuki', employeeKey: 'YOUR_EMPLOYEE_KEY' },
   'movel_taro_002': { name: 'Taro', employeeKey: 'YOUR_EMPLOYEE_KEY_2' },
 };
-
 let scanning = false;
 let lastScanned = '';
 let lastScannedTime = 0;
 const COOLDOWN = 3000;
 const attendanceState = {};
-
+let frameCount = 0;
 setInterval(() => {
   document.getElementById('clock').textContent =
     new Date().toLocaleTimeString('ja-JP', { hour12: false });
 }, 1000);
-document.getElementById('clock').textContent =
-  new Date().toLocaleTimeString('ja-JP', { hour12: false });
-
 function showToast(text, type) {
   const t = document.getElementById('toast');
   t.className = `toast toast-${type} show`;
   t.textContent = text;
   setTimeout(() => t.classList.remove('show'), 2500);
 }
-
 function addLog(id, name, type) {
   const list = document.getElementById('logList');
   const empty = list.querySelector('.log-empty');
@@ -255,58 +124,28 @@ function addLog(id, name, type) {
   const labelMap = { in: '出勤', out: '退勤', err: '未登録' };
   const item = document.createElement('div');
   item.className = 'log-item';
-  item.innerHTML = `
-    <span class="badge badge-${type}">${labelMap[type]}</span>
-    <span class="log-name">${name}</span>
-    <span class="log-time">${timeStr}</span>
-  `;
+  item.innerHTML = `<span class="badge badge-${type}">${labelMap[type]}</span><span class="log-name">${name}</span><span class="log-time">${timeStr}</span>`;
   list.insertBefore(item, list.firstChild);
 }
-
 async function punch(employeeId) {
   const emp = employees[employeeId];
   if (!emp) {
-    showToast('未登録のQRコード', 'err');
+    showToast('未登録: ' + employeeId.substring(0, 12), 'err');
     addLog(employeeId, employeeId, 'err');
     return;
   }
-
   const isIn = !attendanceState[employeeId];
   attendanceState[employeeId] = isIn;
   const type = isIn ? 'in' : 'out';
-  const label = isIn ? '出勤' : '退勤';
-
-  showToast(`${emp.name} ${label}`, type);
+  showToast(`${emp.name} ${isIn ? '出勤' : '退勤'}`, type);
   addLog(employeeId, emp.name, type);
-
-  // KING OF TIME API連携（トークン設定後に有効化）
-  if (KOT_TOKEN !== 'YOUR_KOT_TOKEN_HERE') {
-    try {
-      const now = new Date();
-      await fetch(`https://api.kingtime.jp/v1.0/daily-workings/timerecord/${emp.employeeKey}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${KOT_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          date: now.toISOString().split('T')[0],
-          time: now.toISOString(),
-          code: isIn ? 1 : 2
-        })
-      });
-    } catch(e) {
-      console.error('KOT API error:', e);
-    }
-  }
 }
-
 async function startCamera() {
   const btn = document.getElementById('mainBtn');
   btn.textContent = '起動中...';
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' }
+      video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }
     });
     const video = document.getElementById('videoEl');
     video.srcObject = stream;
@@ -314,8 +153,9 @@ async function startCamera() {
     document.getElementById('placeholder').style.display = 'none';
     document.getElementById('scanFrame').style.display = 'block';
     document.getElementById('camHint').style.display = 'block';
+    document.getElementById('debugText').style.display = 'block';
     document.getElementById('statusText').textContent = 'スキャン中';
-    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg> 停止`;
+    btn.textContent = '停止';
     btn.onclick = stopCamera;
     scanning = true;
     requestAnimationFrame(scanLoop);
@@ -324,7 +164,6 @@ async function startCamera() {
     btn.textContent = 'カメラ起動';
   }
 }
-
 function stopCamera() {
   scanning = false;
   const video = document.getElementById('videoEl');
@@ -333,22 +172,30 @@ function stopCamera() {
   document.getElementById('placeholder').style.display = 'flex';
   document.getElementById('scanFrame').style.display = 'none';
   document.getElementById('camHint').style.display = 'none';
+  document.getElementById('debugText').style.display = 'none';
   document.getElementById('statusText').textContent = '待機中';
   const btn = document.getElementById('mainBtn');
-  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> カメラ起動`;
+  btn.textContent = 'カメラ起動';
   btn.onclick = startCamera;
 }
-
 function scanLoop() {
   if (!scanning) return;
   const video = document.getElementById('videoEl');
   if (video.readyState === video.HAVE_ENOUGH_DATA) {
-    const canvas = document.createElement('canvas');
+    frameCount++;
+    const canvas = document.getElementById('debugCanvas');
+    const ctx = canvas.getContext('2d');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
-    const imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-    const code = jsQR(imageData.data, imageData.width, imageData.height);
+    ctx.filter = 'contrast(1.5) brightness(1.2)';
+    ctx.drawImage(video, 0, 0);
+    ctx.filter = 'none';
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height, {
+      inversionAttempts: 'attemptBoth'
+    });
+    document.getElementById('debugText').textContent =
+      `${canvas.width}x${canvas.height} f:${frameCount}${code ? ' ✓' : ''}`;
     if (code) {
       const now = Date.now();
       if (code.data !== lastScanned || now - lastScannedTime > COOLDOWN) {
